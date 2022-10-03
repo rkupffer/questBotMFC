@@ -1,6 +1,8 @@
-# automated form filler for mfc questionnaires using selenium
+# automated form filler for mfc questionnaires (triplets, full ranking) using selenium
 import random
+import sys
 import time
+import os
 import selenium
 from selenium import webdriver
 from selenium.webdriver.common import by
@@ -13,14 +15,14 @@ options.binary_location = "/Applications/Google Chrome.app/Contents/MacOS/Google
 options.add_argument("window-size=1000x1000")
 
 # initialization of class Chrome and set questionnaire url
+quest_file = open("link2questionnaire.txt", "r")
 chrome = webdriver.Chrome(options=options)
-chrome.get(url="XXX")
+chrome.get(url = quest_file.readline())
 
 # questionnaire -----------------------------------------------------------------------------------------------------
 chrome.find_element("name", "submitNext").click()
 
 time.sleep(1)
-
 
 def dragdrop(page, item, rank):
     start = chrome.find_element("id", "BT" + page + "_0" + item + "Tkn")
@@ -40,8 +42,11 @@ while p < len(quest_pages):
     sampled_item = random.sample(all_items, 3)
     for i in range(len(all_items)):
         dragdrop(quest_pages[p], sampled_item[i], sampled_rank[i])
-        rand_pause_between_items = random.uniform(0.5, 6)
+        rand_pause_between_items = random.uniform(0.5, 3)
         time.sleep(rand_pause_between_items)
     chrome.find_element("name", "submitNext").click()
     p += 1
 
+
+chrome.close()
+sys.exit()
