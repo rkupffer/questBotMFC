@@ -13,18 +13,20 @@ options = webdriver.ChromeOptions()
 options.binary_location = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 options.add_argument("window-size=700x700")
 
-# initialization of class Chrome and set questionnaire url
 quest_file = open("link2questionnaire.txt", "r")
-chrome = webdriver.Chrome(options=options)
-chrome.get(url = quest_file.readline())
+url = quest_file.readline()
+quest_file.close()
 
-# create sample of n = X bot responses ------------------------------------------------------------------------------
+# create sample of n = 600 bot responses
 r = 0
-while r < 10:
-    # questionnaire -------------------------------------------------------------------------------------------------
+while r < 600:
+    # initialization of class Chrome and set questionnaire url
+    chrome = webdriver.Chrome(options=options)
+    chrome.get(url = url)
+
+    # start of the questionnaire
     time.sleep(1)
     chrome.find_element("name", "submitNext").click()
-
     time.sleep(1)
 
     def dragdrop(page, item, rank):
@@ -52,9 +54,8 @@ while r < 10:
             except selenium.common.exceptions.NoSuchElementException:
                 pass
         p += 1
-
+    r += 1
     chrome.close()
-    sys.exit()
+    del chrome
 
-r += 1
 
